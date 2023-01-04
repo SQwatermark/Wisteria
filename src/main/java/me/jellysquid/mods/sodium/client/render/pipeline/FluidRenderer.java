@@ -5,10 +5,10 @@ import me.jellysquid.mods.sodium.client.model.light.LightPipeline;
 import me.jellysquid.mods.sodium.client.model.light.LightPipelineProvider;
 import me.jellysquid.mods.sodium.client.model.light.data.QuadLightData;
 import me.jellysquid.mods.sodium.client.model.quad.ModelQuad;
-import me.jellysquid.mods.sodium.client.model.quad.blender.ColorSampler;
 import me.jellysquid.mods.sodium.client.model.quad.ModelQuadView;
 import me.jellysquid.mods.sodium.client.model.quad.ModelQuadViewMutable;
 import me.jellysquid.mods.sodium.client.model.quad.blender.ColorBlender;
+import me.jellysquid.mods.sodium.client.model.quad.blender.ColorSampler;
 import me.jellysquid.mods.sodium.client.model.quad.properties.ModelQuadFacing;
 import me.jellysquid.mods.sodium.client.model.quad.properties.ModelQuadFlags;
 import me.jellysquid.mods.sodium.client.model.quad.properties.ModelQuadWinding;
@@ -17,8 +17,6 @@ import me.jellysquid.mods.sodium.client.render.chunk.format.ModelVertexSink;
 import me.jellysquid.mods.sodium.client.util.Norm3b;
 import me.jellysquid.mods.sodium.client.util.color.ColorABGR;
 import me.jellysquid.mods.sodium.common.util.DirectionUtil;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
-import net.fabricmc.fabric.impl.client.rendering.fluid.FluidRenderHandlerRegistryImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SideShapeType;
 import net.minecraft.client.MinecraftClient;
@@ -27,6 +25,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -129,10 +128,18 @@ public class FluidRenderer {
 
         boolean isWater = fluidState.isIn(FluidTags.WATER);
 
-        FluidRenderHandler handler = FluidRenderHandlerRegistryImpl.INSTANCE.get(fluidState.getFluid());
-        ColorSampler<FluidState> colorizer = this.createColorProviderAdapter(handler);
+//        FluidRenderHandler handler = FluidRenderHandlerRegistryImpl.INSTANCE.get(fluidState.getFluid());
+//        ColorSampler<FluidState> colorizer = this.createColorProviderAdapter(handler);
 
-        Sprite[] sprites = handler.getFluidSprites(world, pos, fluidState);
+        ColorSampler<FluidState> colorizer = this.createColorProviderAdapter();
+
+        var f = MinecraftClient.getInstance().getSpriteAtlas(new Identifier("textures/atlas/blocks"));
+        Sprite[] sprites = new Sprite[3];
+        sprites[0] = f.apply(new Identifier("block/water_still"));
+        sprites[1] = f.apply(new Identifier("block/water_flow"));
+        sprites[2] = f.apply(new Identifier("block/water_overlay"));
+
+//        Sprite[] sprites = handler.getFluidSprites(world, pos, fluidState);
 
         boolean rendered = false;
 
@@ -380,9 +387,15 @@ public class FluidRenderer {
         return rendered;
     }
 
-    private ColorSampler<FluidState> createColorProviderAdapter(FluidRenderHandler handler) {
+//    private ColorSampler<FluidState> createColorProviderAdapter(FluidRenderHandler handler) {
+//        FabricFluidColorizerAdapter adapter = this.fabricColorProviderAdapter;
+//        adapter.setHandler(handler);
+//
+//        return adapter;
+//    }
+
+    private ColorSampler<FluidState> createColorProviderAdapter() {
         FabricFluidColorizerAdapter adapter = this.fabricColorProviderAdapter;
-        adapter.setHandler(handler);
 
         return adapter;
     }
@@ -495,19 +508,20 @@ public class FluidRenderer {
     }
 
     private static class FabricFluidColorizerAdapter implements ColorSampler<FluidState> {
-        private FluidRenderHandler handler;
-
-        public void setHandler(FluidRenderHandler handler) {
-            this.handler = handler;
-        }
+//        private FluidRenderHandler handler;
+//
+//        public void setHandler(FluidRenderHandler handler) {
+//            this.handler = handler;
+//        }
 
         @Override
         public int getColor(FluidState state, @Nullable BlockRenderView world, @Nullable BlockPos pos, int tintIndex) {
-            if (this.handler == null) {
-                return -1;
-            }
-
-            return this.handler.getFluidColor(world, pos, state);
+//            if (this.handler == null) {
+//                return -1;
+//            }
+//
+//            return this.handler.getFluidColor(world, pos, state);
+            return -1;
         }
     }
 }

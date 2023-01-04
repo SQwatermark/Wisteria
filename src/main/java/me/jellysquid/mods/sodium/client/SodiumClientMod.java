@@ -1,29 +1,34 @@
 package me.jellysquid.mods.sodium.client;
 
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptions;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class SodiumClientMod implements ClientModInitializer {
+@Mod("sodium")
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = "sodium")
+public class SodiumClientMod {
     private static SodiumGameOptions CONFIG;
-    private static Logger LOGGER;
+    public static Logger LOGGER;
 
     private static String MOD_VERSION;
 
-    @Override
-    public void onInitializeClient() {
-        ModContainer mod = FabricLoader.getInstance()
-                .getModContainer("sodium")
-                .orElseThrow(NullPointerException::new);
+    @SubscribeEvent
+    public static void onInitializeClient(FMLClientSetupEvent event) {
+//        ModContainer mod = FabricLoader.getInstance()
+//                .getModContainer("sodium")
+//                .orElseThrow(NullPointerException::new);
 
-        MOD_VERSION = mod.getMetadata()
-                .getVersion()
-                .getFriendlyString();
+//        MOD_VERSION = mod.getMetadata()
+//                .getVersion()
+//                .getFriendlyString();
+
+        MOD_VERSION = "0.0.1";
 
         LOGGER = LoggerFactory.getLogger("Sodium");
         CONFIG = loadConfig();

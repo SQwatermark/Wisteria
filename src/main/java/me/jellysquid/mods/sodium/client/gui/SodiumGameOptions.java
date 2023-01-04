@@ -4,17 +4,17 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.jellysquid.mods.sodium.client.gui.options.TextProvider;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.option.GraphicsMode;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class SodiumGameOptions {
@@ -149,9 +149,7 @@ public class SodiumGameOptions {
     }
 
     private static Path getConfigPath(String name) {
-        return FabricLoader.getInstance()
-                .getConfigDir()
-                .resolve(name);
+        return Paths.get("config", name);
     }
 
     public void writeChanges() throws IOException {

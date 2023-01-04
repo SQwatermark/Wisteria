@@ -39,7 +39,7 @@ public class MixinItemRenderer {
      * @author JellySquid
      */
     @Overwrite
-    private void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices) {
+    public void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices) {
         XoRoShiRoRandom random = this.random;
 
         for (Direction direction : DirectionUtil.ALL_DIRECTIONS) {
@@ -62,7 +62,7 @@ public class MixinItemRenderer {
      * @author JellySquid
      */
     @Overwrite
-    private void renderBakedItemQuads(MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack stack, int light, int overlay) {
+    public void renderBakedItemQuads(MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack stack, int light, int overlay) {
         MatrixStack.Entry entry = matrices.peek();
 
         ItemColorProvider colorProvider = null;

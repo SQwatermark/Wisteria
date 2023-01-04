@@ -6,7 +6,6 @@ import me.jellysquid.mods.sodium.client.world.cloned.ClonedChunkSection;
 import me.jellysquid.mods.sodium.client.world.cloned.ClonedChunkSectionCache;
 import me.jellysquid.mods.sodium.client.world.cloned.PackedIntegerArrayExtended;
 import me.jellysquid.mods.sodium.client.world.cloned.palette.ClonedPalette;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachedBlockView;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -36,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * Object pooling should be used to avoid huge allocations as this class contains many large arrays.
  */
-public class WorldSlice implements BlockRenderView, RenderAttachedBlockView {
+public class WorldSlice implements BlockRenderView {
     // The number of blocks in a section.
     private static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
 
@@ -288,15 +287,15 @@ public class WorldSlice implements BlockRenderView, RenderAttachedBlockView {
         return this.world.getBottomY();
     }
 
-    @Override
-    public @Nullable Object getBlockEntityRenderAttachment(BlockPos pos) {
-        int relX = pos.getX() - this.baseX;
-        int relY = pos.getY() - this.baseY;
-        int relZ = pos.getZ() - this.baseZ;
-
-        return this.sections[WorldSlice.getLocalSectionIndex(relX >> 4, relY >> 4, relZ >> 4)]
-                .getBlockEntityRenderAttachment(relX & 15, relY & 15, relZ & 15);
-    }
+//    @Override
+//    public @Nullable Object getBlockEntityRenderAttachment(BlockPos pos) {
+//        int relX = pos.getX() - this.baseX;
+//        int relY = pos.getY() - this.baseY;
+//        int relZ = pos.getZ() - this.baseZ;
+//
+//        return this.sections[WorldSlice.getLocalSectionIndex(relX >> 4, relY >> 4, relZ >> 4)]
+//                .getBlockEntityRenderAttachment(relX & 15, relY & 15, relZ & 15);
+//    }
 
     // Coordinates are in biome space!
     private RegistryEntry<Biome> getStoredBiome(int biomeX, int biomeY, int biomeZ) {

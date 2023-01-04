@@ -1,5 +1,6 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+//    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id "dev.architectury.loom" version "0.12.0-SNAPSHOT"
     id 'org.ajoberstar.grgit' version '4.1.0'
 }
 
@@ -13,6 +14,20 @@ group = project.maven_group
 loom {
     mixin.defaultRefmapName = "mixins.sodium.refmap.json"
     accessWidenerPath = file("src/main/resources/sodium.accesswidener")
+
+    forge {
+        // specify the mixin configs used in this mod
+        // this will be added to the jar manifest as well!
+//        mixinConfigs = [
+//                "sodium.mixins.json"
+//        ]
+    }
+
+    launches {
+        data {
+            arg "--existing", file("src/main/resources").absolutePath
+        }
+    }
 }
 
 configurations {
@@ -26,22 +41,23 @@ dependencies {
     //to change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    forge "net.minecraftforge:forge:${project.forge_version}"
+//    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     implementation 'org.joml:joml:1.10.2'
     include 'org.joml:joml:1.10.2'
 
     // Fabric API
-    modIncludeImplementation(fabricApi.module("fabric-api-base", project.fabric_version))
-    modIncludeImplementation(fabricApi.module("fabric-rendering-fluids-v1", project.fabric_version))
-    modIncludeImplementation(fabricApi.module("fabric-rendering-data-attachment-v1", project.fabric_version))
-    modIncludeImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
+//    modIncludeImplementation(fabricApi.module("fabric-api-base", project.fabric_version))
+//    modIncludeImplementation(fabricApi.module("fabric-rendering-fluids-v1", project.fabric_version))
+//    modIncludeImplementation(fabricApi.module("fabric-rendering-data-attachment-v1", project.fabric_version))
+//    modIncludeImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
 }
 
 processResources {
     inputs.property "version", project.version
 
-    filesMatching("fabric.mod.json") {
+    filesMatching("META-INF/mods.toml") {
         expand "version": project.version
     }
 }
@@ -59,6 +75,17 @@ java {
 
 jar {
     from "LICENSE.txt"
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : version,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
 def getVersionMetadata() {

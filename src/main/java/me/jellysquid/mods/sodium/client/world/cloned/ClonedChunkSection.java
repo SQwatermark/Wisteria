@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import me.jellysquid.mods.sodium.client.world.cloned.palette.ClonedPalette;
 import me.jellysquid.mods.sodium.client.world.cloned.palette.ClonedPaletteFallback;
 import me.jellysquid.mods.sodium.client.world.cloned.palette.ClonedPalleteArray;
-import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -132,11 +131,11 @@ public class ClonedChunkSection {
         // other mods. This could potentially result in the chunk being modified, which would cause problems if we
         // were iterating over any data in that chunk.
         // See https://github.com/CaffeineMC/sodium-fabric/issues/942 for more info.
-        for (Short2ObjectMap.Entry<BlockEntity> entry : Short2ObjectMaps.fastIterable(this.blockEntities)) {
-            if (entry.getValue() instanceof RenderAttachmentBlockEntity entity) {
-                this.renderAttachments.put(entry.getShortKey(), entity.getRenderAttachmentData());
-            }
-        }
+//        for (Short2ObjectMap.Entry<BlockEntity> entry : Short2ObjectMaps.fastIterable(this.blockEntities)) {
+//            if (entry.getValue() instanceof RenderAttachmentBlockEntity entity) {
+//                this.renderAttachments.put(entry.getShortKey(), entity.getRenderAttachmentData());
+//            }
+//        }
     }
 
     public RegistryEntry<Biome> getBiome(int x, int y, int z) {
