@@ -1,5 +1,9 @@
 package me.jellysquid.mods.sodium.client.render.pipeline;
 
+import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.jetbrains.annotations.Nullable;
+
 import me.jellysquid.mods.sodium.client.model.light.LightMode;
 import me.jellysquid.mods.sodium.client.model.light.LightPipeline;
 import me.jellysquid.mods.sodium.client.model.light.LightPipelineProvider;
@@ -25,7 +29,6 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tag.FluidTags;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -33,9 +36,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockRenderView;
-import org.apache.commons.lang3.mutable.MutableFloat;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.jetbrains.annotations.Nullable;
+import net.minecraftforge.client.ForgeHooksClient;
 
 public class FluidRenderer {
     // TODO: allow this to be changed by vertex format
@@ -54,7 +55,7 @@ public class FluidRenderer {
     private final ColorBlender colorBlender;
 
     // Cached wrapper type that adapts FluidRenderHandler to support QuadColorProvider<FluidState>
-    private final FabricFluidColorizerAdapter fabricColorProviderAdapter = new FabricFluidColorizerAdapter();
+    private final ForgeFluidColorizerAdapter forgeColorProviderAdapter = new ForgeFluidColorizerAdapter();
 
     private final QuadLightData quadLightData = new QuadLightData();
     private final int[] quadColors = new int[4];
@@ -80,7 +81,7 @@ public class FluidRenderer {
         if (blockState.isOpaque()) {
             return world.getFluidState(adjPos).getFluid().matchesType(fluid) || blockState.isSideSolid(world,pos,dir, SideShapeType.FULL);
             // fluidlogged or next to water, occlude sides that are solid or the same liquid
-            }
+        }
         return world.getFluidState(adjPos).getFluid().matchesType(fluid);
     }
 
@@ -128,18 +129,9 @@ public class FluidRenderer {
 
         boolean isWater = fluidState.isIn(FluidTags.WATER);
 
-//        FluidRenderHandler handler = FluidRenderHandlerRegistryImpl.INSTANCE.get(fluidState.getFluid());
-//        ColorSampler<FluidState> colorizer = this.createColorProviderAdapter(handler);
+        ColorSampler<FluidState> colorizer = this.createColorProviderAdapter(world, pos, fluidState);
 
-        ColorSampler<FluidState> colorizer = this.createColorProviderAdapter();
-
-        var f = MinecraftClient.getInstance().getSpriteAtlas(new Identifier("textures/atlas/blocks"));
-        Sprite[] sprites = new Sprite[3];
-        sprites[0] = f.apply(new Identifier("block/water_still"));
-        sprites[1] = f.apply(new Identifier("block/water_flow"));
-        sprites[2] = f.apply(new Identifier("block/water_overlay"));
-
-//        Sprite[] sprites = handler.getFluidSprites(world, pos, fluidState);
+        Sprite[] sprites = ForgeHooksClient.getFluidSprites(world, pos, fluidState);
 
         boolean rendered = false;
 
@@ -160,6 +152,7 @@ public class FluidRenderer {
             h3 = this.fluidCornerHeight(world, fluid, fluidHeight, south1, east1, pos.offset(Direction.SOUTH).offset(Direction.EAST));
             h4 = this.fluidCornerHeight(world, fluid, fluidHeight, north1, east1, pos.offset(Direction.NORTH).offset(Direction.EAST));
         }
+
         float yOffset = sfDown ? 0.0F : EPSILON;
 
         final ModelQuadViewMutable quad = this.quad;
@@ -270,7 +263,7 @@ public class FluidRenderer {
             rendered = true;
         }
 
-        this.quad.setFlags(ModelQuadFlags.IS_ALIGNED);
+        quad.setFlags(ModelQuadFlags.IS_ALIGNED);
 
         for (Direction dir : DirectionUtil.HORIZONTAL_DIRECTIONS) {
             float c1;
@@ -387,15 +380,9 @@ public class FluidRenderer {
         return rendered;
     }
 
-//    private ColorSampler<FluidState> createColorProviderAdapter(FluidRenderHandler handler) {
-//        FabricFluidColorizerAdapter adapter = this.fabricColorProviderAdapter;
-//        adapter.setHandler(handler);
-//
-//        return adapter;
-//    }
-
-    private ColorSampler<FluidState> createColorProviderAdapter() {
-        FabricFluidColorizerAdapter adapter = this.fabricColorProviderAdapter;
+    private ColorSampler<FluidState> createColorProviderAdapter(BlockRenderView view, BlockPos pos, FluidState state) {
+        ForgeFluidColorizerAdapter adapter = this.forgeColorProviderAdapter;
+        adapter.setHandler(view, pos, state);
 
         return adapter;
     }
@@ -507,21 +494,24 @@ public class FluidRenderer {
         return -1.0f;
     }
 
-    private static class FabricFluidColorizerAdapter implements ColorSampler<FluidState> {
-//        private FluidRenderHandler handler;
-//
-//        public void setHandler(FluidRenderHandler handler) {
-//            this.handler = handler;
-//        }
+    private static class ForgeFluidColorizerAdapter implements ColorSampler<FluidState> {
+        private BlockRenderView world;
+        private BlockPos pos;
+        private FluidState state;
+
+        public void setHandler(BlockRenderView world, BlockPos pos, FluidState state) {
+            this.world = world;
+            this.pos = pos;
+            this.state = state;
+        }
 
         @Override
         public int getColor(FluidState state, @Nullable BlockRenderView world, @Nullable BlockPos pos, int tintIndex) {
-//            if (this.handler == null) {
-//                return -1;
-//            }
-//
-//            return this.handler.getFluidColor(world, pos, state);
-            return -1;
+            if (this.world == null || this.state == null) {
+                return -1;
+            }
+
+            return state.getFluid().getAttributes().getColor(world, pos);
         }
     }
 }
