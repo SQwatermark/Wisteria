@@ -18,6 +18,13 @@ public class SodiumClientMod {
 
     private static String MOD_VERSION;
 
+    static {
+        MOD_VERSION = "0.0.1";
+
+        LOGGER = LoggerFactory.getLogger("Sodium");
+        CONFIG = loadConfig();
+    }
+
     @SubscribeEvent
     public static void onInitializeClient(FMLClientSetupEvent event) {
 //        ModContainer mod = FabricLoader.getInstance()
@@ -28,10 +35,7 @@ public class SodiumClientMod {
 //                .getVersion()
 //                .getFriendlyString();
 
-        MOD_VERSION = "0.0.1";
 
-        LOGGER = LoggerFactory.getLogger("Sodium");
-        CONFIG = loadConfig();
     }
 
     public static SodiumGameOptions options() {

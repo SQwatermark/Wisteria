@@ -1,6 +1,9 @@
 {
   "package": "me.jellysquid.mods.sodium.mixin",
+  "plugin": "me.jellysquid.mods.sodium.mixin.SodiumMixinPlugin",
   "required": true,
+  "minVersion": "0.0.0",
+  "refmap": "mixins.sodium.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "injectors": {
     "defaultRequire": 1
