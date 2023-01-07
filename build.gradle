@@ -108,6 +108,11 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
+    minecraftLibrary 'org.joml:joml:1.10.4'
+
+    jarJar.enable()
+    jarJar(group: 'org.joml', name: 'joml', version: '[1.0,2.0)')
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
