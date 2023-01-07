@@ -1,8 +1,8 @@
 package me.jellysquid.mods.sodium.client.model.quad.blender;
 
 import me.jellysquid.mods.sodium.client.model.quad.ModelQuadView;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockRenderView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
 
 public interface ColorBlender {
     /**
@@ -18,5 +18,5 @@ public interface ColorBlender {
      * @param state The block state being rendered
      * @return An array of ABGR colors
      */
-    <T> int[] getColors(BlockRenderView world, BlockPos origin, ModelQuadView quad, ColorSampler<T> sampler, T state);
+    <T> int[] getColors(BlockAndTintGetter world, BlockPos origin, ModelQuadView quad, ColorSampler<T> sampler, T state);
 }

@@ -13,9 +13,9 @@ import java.util.Properties;
  */
 @SuppressWarnings("CanBeFinal")
 public class SodiumConfig {
-    private static final Logger LOGGER = LogManager.getLogger("SodiumConfig");
+    private static final Logger LOGGER = LogManager.getLogger("WisteriaConfig");
 
-    private static final String JSON_KEY_SODIUM_OPTIONS = "sodium:options";
+    private static final String JSON_KEY_SODIUM_OPTIONS = "wisteria:options";
 
     private final Map<String, Option> options = new HashMap<>();
 
@@ -217,7 +217,7 @@ public class SodiumConfig {
         }
 
         try (Writer writer = new FileWriter(file)) {
-            writer.write("# This is the configuration file for Sodium.\n");
+            writer.write("# This is the configuration file for Wisteria.\n");
             writer.write("#\n");
             writer.write("# You can find information on editing this file and all the available options here:\n");
             writer.write("# https://github.com/jellysquid3/sodium-fabric/wiki/Configuration-File\n");

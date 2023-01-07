@@ -3,16 +3,21 @@ loaderVersion = "[40,)"
 license = "LGPL-3.0-only"
 
 [[mods]]
-modId = "sodium"
+modId = "wisteria"
 version = "${version}"
-displayName = "Sodium"
+displayName = "Wisteria"
 description = '''
+Sodium is a free and open-source optimization mod for Minecraft which improves frame rates and reduces lag spikes.
+Wisteria is a forge ported version of Sodium by SQwatermark.
 '''
+logoFile= "icon.png"
+authors="JellySquid,SQwatermark(Forge Porter)"
+# displayTest = "IGNORE_ALL_VERSION" 1.19
 
 # An (optional) dependency for your mod. Though technically not required,
 # it's always helpful to add these to stop your mod from loading when something is missing
 # rather than erroring out later
-[[dependencies.sodium]]
+[[dependencies.wisteria]]
 modId = "forge"
 mandatory = true # do you **need** this mod to be able to launch?
 versionRange = "[40,)" # This essentially means any forge >= 40
@@ -20,7 +25,7 @@ ordering = "NONE" # Use this if you want your mod to be loaded specifically BEFO
 side = "BOTH" # Specify where this mod is required: can be BOTH, CLIENT or SERVER
 
 # And another dependency, use this if you want to require a certain Minecraft version.
-[[dependencies.sodium]]
+[[dependencies.wisteria]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.18.2,)"

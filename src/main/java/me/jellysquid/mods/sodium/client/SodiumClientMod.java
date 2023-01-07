@@ -10,18 +10,22 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-@Mod("sodium")
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = "sodium")
+@Mod(SodiumClientMod.MOD_ID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = SodiumClientMod.MOD_ID)
 public class SodiumClientMod {
     private static SodiumGameOptions CONFIG;
     public static Logger LOGGER;
+
+    public static final String MOD_ID = "wisteria";
+
+    public static final String MOD_NAME = "Wisteria";
 
     private static String MOD_VERSION;
 
     static {
         MOD_VERSION = "0.0.1";
 
-        LOGGER = LoggerFactory.getLogger("Sodium");
+        LOGGER = LoggerFactory.getLogger(MOD_NAME);
         CONFIG = loadConfig();
     }
 

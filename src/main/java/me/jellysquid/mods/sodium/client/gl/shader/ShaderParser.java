@@ -1,6 +1,6 @@
 package me.jellysquid.mods.sodium.client.gl.shader;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class ShaderParser {
         String namespace = matcher.group("namespace");
         String path = matcher.group("path");
 
-        Identifier identifier = new Identifier(namespace, path);
+        ResourceLocation identifier = new ResourceLocation(namespace, path);
         String source = ShaderLoader.getShaderSource(identifier);
 
         return ShaderParser.parseShader(source);

@@ -1,9 +1,9 @@
 #version 150 core
 
-#import <sodium:include/fog.glsl>
-#import <sodium:include/chunk_vertex.glsl>
-#import <sodium:include/chunk_parameters.glsl>
-#import <sodium:include/chunk_matrices.glsl>
+#import <wisteria:include/fog.glsl>
+#import <wisteria:include/chunk_vertex.glsl>
+#import <wisteria:include/chunk_parameters.glsl>
+#import <wisteria:include/chunk_matrices.glsl>
 
 out vec4 v_Color;
 out vec2 v_TexCoord;

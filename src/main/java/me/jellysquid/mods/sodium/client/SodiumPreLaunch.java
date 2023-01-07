@@ -2,8 +2,11 @@ package me.jellysquid.mods.sodium.client;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.IExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.network.NetworkConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.system.Configuration;
@@ -12,12 +15,14 @@ import org.lwjgl.system.jemalloc.JEmalloc;
 
 import java.util.Objects;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = "sodium")
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = SodiumClientMod.MOD_ID)
 public class SodiumPreLaunch {
-    private static final Logger LOGGER = LogManager.getLogger("Sodium");
+    private static final Logger LOGGER = LogManager.getLogger(SodiumClientMod.MOD_NAME);
 
     @SubscribeEvent
     public static void onPreLaunch(FMLCommonSetupEvent event) {
+        // see https://forge.gemwire.uk/wiki/Sides/1.18#Writing_One-Sided_Mods
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
         checkJemalloc();
     }
 
