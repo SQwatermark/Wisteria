@@ -105,12 +105,24 @@ repositories {
     mavenCentral()
 }
 
+// 启用jarJar
+jarJar.enable()
+
+// 混淆jarJar
+reobf.create('jarJar')
+
+// 运行build时进行jarJar
+build {
+    dependsOn 'jarJar'
+}
+
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
+    // 开发环境引入joml
     minecraftLibrary 'org.joml:joml:1.10.4'
 
-    jarJar.enable()
+    // 打包joml
     jarJar(group: 'org.joml', name: 'joml', version: '[1.0,2.0)')
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
