@@ -111,10 +111,7 @@ jarJar.enable()
 // 混淆jarJar
 reobf.create('jarJar')
 
-// 运行build时进行jarJar
-build {
-    dependsOn 'jarJar'
-}
+tasks.jarJar.getArchiveClassifier().convention('')
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
@@ -171,7 +168,6 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
             artifact tasks.jarJar
             artifact sourcesJar
             groupId = project.maven_group
