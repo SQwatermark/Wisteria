@@ -61,7 +61,7 @@ public class MixinMultipartBakedModel {
         for (BakedModel model : models) {
             random.setSeed(seed);
 
-            list.addAll(model.getQuads(state, face, random));
+            list.addAll(model.getQuads(state, face, random, net.minecraftforge.client.model.data.MultipartModelData.resolve(model, modelData)));
         }
 
         return list;

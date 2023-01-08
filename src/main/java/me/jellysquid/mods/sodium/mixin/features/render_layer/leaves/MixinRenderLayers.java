@@ -33,16 +33,15 @@ public class MixinRenderLayers {
 
     static {
         // Replace the backing collection types with something a bit faster, since this is a hot spot in chunk rendering.
-        TYPE_BY_BLOCK = new Reference2ReferenceOpenHashMap(TYPE_BY_BLOCK);
-        TYPE_BY_FLUID = new Reference2ReferenceOpenHashMap(TYPE_BY_FLUID);
+        TYPE_BY_BLOCK = new Reference2ReferenceOpenHashMap<>(TYPE_BY_BLOCK);
+        TYPE_BY_FLUID = new Reference2ReferenceOpenHashMap<>(TYPE_BY_FLUID);
     }
 
-    // TODO FORGE: Use canRenderInLayer
-    @Inject(method = "getChunkRenderType", at = @At("RETURN"), cancellable = true)
-    private static void redirectLeavesGraphics(BlockState state, CallbackInfoReturnable<RenderType> cir) {
+    @Inject(method = "canRenderInLayer(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/client/renderer/RenderType;)Z", at = @At("HEAD"), cancellable = true)
+    private static void redirectLeavesGraphics(BlockState state, RenderType type, CallbackInfoReturnable<Boolean> cir) {
         if (state.getBlock() instanceof LeavesBlock) {
             boolean fancyLeaves = SodiumClientMod.options().quality.leavesQuality.isFancy(Minecraft.getInstance().options.graphicsMode);
-            cir.setReturnValue(fancyLeaves ? RenderType.cutoutMipped() : RenderType.solid());
+            cir.setReturnValue(fancyLeaves ? type == RenderType.cutoutMipped() : type == RenderType.solid());
         }
     }
 }
