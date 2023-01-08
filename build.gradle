@@ -172,6 +172,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            artifact tasks.jarJar
             artifact sourcesJar
             groupId = project.maven_group
             artifactId = project.archives_base_name
