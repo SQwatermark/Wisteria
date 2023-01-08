@@ -41,7 +41,7 @@ public class MixinBlockModelRenderer {
      * @author JellySquid
      */
     @Overwrite
-    public void renderModel(PoseStack.Pose entry, VertexConsumer vertexConsumer, BlockState blockState, BakedModel bakedModel, float red, float green, float blue, int light, int overlay) {
+    public void renderModel(PoseStack.Pose entry, VertexConsumer vertexConsumer, BlockState blockState, BakedModel bakedModel, float red, float green, float blue, int light, int overlay, net.minecraftforge.client.model.data.IModelData modelData) {
         QuadVertexSink drain = VertexDrain.of(vertexConsumer)
                 .createSink(VanillaVertexTypes.QUADS);
         XoRoShiRoRandom random = this.random;
@@ -54,14 +54,14 @@ public class MixinBlockModelRenderer {
         int defaultColor = ColorABGR.pack(red, green, blue, 1.0F);
 
         for (Direction direction : DirectionUtil.ALL_DIRECTIONS) {
-            List<BakedQuad> quads = bakedModel.getQuads(blockState, direction, random.setSeedAndReturn(42L));
+            List<BakedQuad> quads = bakedModel.getQuads(blockState, direction, random.setSeedAndReturn(42L), modelData);
 
             if (!quads.isEmpty()) {
                 renderQuad(entry, drain, defaultColor, quads, light, overlay);
             }
         }
 
-        List<BakedQuad> quads = bakedModel.getQuads(blockState, null, random.setSeedAndReturn(42L));
+        List<BakedQuad> quads = bakedModel.getQuads(blockState, null, random.setSeedAndReturn(42L), modelData);
 
         if (!quads.isEmpty()) {
             renderQuad(entry, drain, defaultColor, quads, light, overlay);
