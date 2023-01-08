@@ -171,6 +171,7 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact jar
             groupId = project.maven_group
             artifactId = project.archives_base_name
             version = project.mod_version
