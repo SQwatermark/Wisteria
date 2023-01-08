@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 archivesBaseName = "${project.archives_base_name}-mc${project.minecraft_version}"
-version = "${project.mod_version}"
+version = "${project.mod_version}${project.dev_version}"
 group = project.maven_group
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -170,9 +170,9 @@ publishing {
         mavenJava(MavenPublication) {
             artifact tasks.jarJar
             artifact sourcesJar
-            groupId = project.maven_group
-            artifactId = project.archives_base_name
-            version = project.mod_version
+            groupId = group
+            artifactId = archivesBaseName
+            version = version
         }
     }
     repositories {
