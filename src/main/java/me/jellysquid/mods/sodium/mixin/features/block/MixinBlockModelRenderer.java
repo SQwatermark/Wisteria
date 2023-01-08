@@ -40,7 +40,7 @@ public class MixinBlockModelRenderer {
      * @reason Use optimized vertex writer intrinsics, avoid allocations
      * @author JellySquid
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public void renderModel(PoseStack.Pose entry, VertexConsumer vertexConsumer, BlockState blockState, BakedModel bakedModel, float red, float green, float blue, int light, int overlay, net.minecraftforge.client.model.data.IModelData modelData) {
         QuadVertexSink drain = VertexDrain.of(vertexConsumer)
                 .createSink(VanillaVertexTypes.QUADS);

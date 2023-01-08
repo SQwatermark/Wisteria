@@ -37,7 +37,7 @@ public class MixinRenderLayers {
         TYPE_BY_FLUID = new Reference2ReferenceOpenHashMap<>(TYPE_BY_FLUID);
     }
 
-    @Inject(method = "canRenderInLayer(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/client/renderer/RenderType;)Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canRenderInLayer(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/client/renderer/RenderType;)Z", at = @At("HEAD"), cancellable = true, remap = false)
     private static void redirectLeavesGraphics(BlockState state, RenderType type, CallbackInfoReturnable<Boolean> cir) {
         if (state.getBlock() instanceof LeavesBlock) {
             boolean fancyLeaves = SodiumClientMod.options().quality.leavesQuality.isFancy(Minecraft.getInstance().options.graphicsMode);

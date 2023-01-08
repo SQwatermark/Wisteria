@@ -37,7 +37,7 @@ public class MixinWeightedBakedModel {
 
         if (quad != null) {
             return quad.getData()
-                    .getQuads(state, face, random);
+                    .getQuads(state, face, random, modelData);
         }
 
         return Collections.emptyList();
