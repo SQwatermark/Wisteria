@@ -121,6 +121,7 @@ dependencies {
 
     implementation fg.deobf('architectury:architectury:4.10.88-forge')
     implementation fg.deobf('yuushya:yuushya-forge:2.0.0')
+    implementation fg.deobf('chiselsandbits:chiselsandbits:1.18.2-alpha-0.3')
 
     // 开发环境引入joml
     minecraftLibrary 'org.joml:joml:1.10.4'
