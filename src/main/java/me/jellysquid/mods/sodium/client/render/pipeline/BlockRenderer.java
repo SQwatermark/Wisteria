@@ -27,6 +27,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.model.data.IModelData;
 
 import java.util.List;
 import java.util.Random;
@@ -54,16 +55,17 @@ public class BlockRenderer {
         this.useAmbientOcclusion = Minecraft.useAmbientOcclusion();
     }
 
-    public boolean renderModel(BlockAndTintGetter world, BlockState state, BlockPos pos, BlockPos origin, BakedModel model, ChunkModelBuilder buffers, boolean cull, long seed) {
+    public boolean renderModel(BlockAndTintGetter world, BlockState state, BlockPos pos, BlockPos origin, BakedModel model, ChunkModelBuilder buffers, boolean cull, long seed, IModelData modelData) {
         LightPipeline lighter = this.lighters.getLighter(this.getLightingMode(state, model));
         Vec3 offset = state.getOffset(world, pos);
+        modelData = model.getModelData(world, pos, state, modelData); // TODO 是否应该在这个阶段调用？
 
         boolean rendered = false;
 
         for (Direction dir : DirectionUtil.ALL_DIRECTIONS) {
             this.random.setSeed(seed);
 
-            List<BakedQuad> sided = model.getQuads(state, dir, this.random);
+            List<BakedQuad> sided = model.getQuads(state, dir, this.random, modelData);
 
             if (sided.isEmpty()) {
                 continue;
@@ -78,7 +80,7 @@ public class BlockRenderer {
 
         this.random.setSeed(seed);
 
-        List<BakedQuad> all = model.getQuads(state, null, this.random);
+        List<BakedQuad> all = model.getQuads(state, null, this.random, modelData);
 
         if (!all.isEmpty()) {
             this.renderQuadList(world, state, pos, origin, lighter, offset, buffers, all, ModelQuadFacing.UNASSIGNED);

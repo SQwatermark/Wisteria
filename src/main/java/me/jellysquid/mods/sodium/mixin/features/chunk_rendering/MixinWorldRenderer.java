@@ -84,7 +84,6 @@ public abstract class MixinWorldRenderer implements WorldRendererExtended {
         return this.renderer.isTerrainRenderComplete();
     }
 
-    // TODO
     @Inject(method = "needsUpdate", at = @At("RETURN"))
     private void onTerrainUpdateScheduled(CallbackInfo ci) {
         this.renderer.scheduleTerrainUpdate();

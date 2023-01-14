@@ -11,7 +11,7 @@ Sodium is a free and open-source optimization mod for Minecraft which improves f
 Wisteria is a forge ported version of Sodium by SQwatermark.
 '''
 logoFile= "icon.png"
-authors="JellySquid,SQwatermark(Forge Porter)"
+authors="JellySquid, SQwatermark(Forge Porter)"
 # displayTest = "IGNORE_ALL_VERSION" 1.19
 
 # An (optional) dependency for your mod. Though technically not required,

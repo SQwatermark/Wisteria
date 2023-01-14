@@ -19,10 +19,16 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.ModelDataManager;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -67,6 +73,9 @@ public class ChunkRenderRebuildTask extends ChunkRenderBuildTask {
         int maxY = minY + 16;
         int maxZ = minZ + 16;
 
+        assert Minecraft.getInstance().level != null;
+        Map<BlockPos, IModelData> modelDataMap = ModelDataManager.getModelData(Minecraft.getInstance().level, new ChunkPos(SectionPos.blockToSectionCoord(minX), SectionPos.blockToSectionCoord(minZ)));
+
         BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
         BlockPos.MutableBlockPos offset = new BlockPos.MutableBlockPos();
 
@@ -90,24 +99,39 @@ public class ChunkRenderRebuildTask extends ChunkRenderBuildTask {
 
                     if (blockState.getRenderShape() == RenderShape.MODEL) {
 
-                        // TODO FORGE: Use canRenderInLayer
-                        RenderType layer = ItemBlockRenderTypes.getChunkRenderType(blockState);
-                        BakedModel model = cache.getBlockModels().getBlockModel(blockState);
+                        for (RenderType chunkBufferLayer : RenderType.chunkBufferLayers()) {
+                            if (!ItemBlockRenderTypes.canRenderInLayer(blockState, chunkBufferLayer)) {
+                                continue;
+                            }
 
-                        long seed = blockState.getSeed(blockPos);
+                            ForgeHooksClient.setRenderType(chunkBufferLayer);
+                            IModelData modelData = modelDataMap.getOrDefault(blockPos, EmptyModelData.INSTANCE);
 
-                        if (cache.getBlockRenderer().renderModel(slice, blockState, blockPos, offset, model, buffers.get(layer), true, seed)) {
-                            rendered = true;
+                            BakedModel model = cache.getBlockModels().getBlockModel(blockState);
+
+                            long seed = blockState.getSeed(blockPos);
+
+                            if (cache.getBlockRenderer().renderModel(slice, blockState, blockPos, offset, model, buffers.get(chunkBufferLayer), true, seed, modelData)) {
+                                rendered = true;
+                            }
                         }
+
                     }
 
                     FluidState fluidState = blockState.getFluidState();
 
                     if (!fluidState.isEmpty()) {
-                        RenderType layer = ItemBlockRenderTypes.getRenderLayer(fluidState);
+                        for (RenderType chunkBufferLayer : RenderType.chunkBufferLayers()) {
+                            if (!ItemBlockRenderTypes.canRenderInLayer(blockState, chunkBufferLayer)) {
+                                continue;
+                            }
 
-                        if (cache.getFluidRenderer().render(slice, fluidState, blockPos, offset, buffers.get(layer))) {
-                            rendered = true;
+                            ForgeHooksClient.setRenderType(chunkBufferLayer);
+
+                            if (cache.getFluidRenderer().render(slice, fluidState, blockPos, offset, buffers.get(chunkBufferLayer))) {
+                                rendered = true;
+                            }
+
                         }
                     }
 
@@ -134,6 +158,8 @@ public class ChunkRenderRebuildTask extends ChunkRenderBuildTask {
                 }
             }
         }
+
+        ForgeHooksClient.setRenderType(null);
 
         Map<BlockRenderPass, ChunkMeshData> meshes = new EnumMap<>(BlockRenderPass.class);
 
