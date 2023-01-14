@@ -119,9 +119,6 @@ tasks.jarJar.getArchiveClassifier().convention('')
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
-    implementation fg.deobf('architectury:architectury:4.10.88-forge')
-    implementation fg.deobf('yuushya:yuushya-forge:2.0.0')
-
     // 开发环境引入joml
     minecraftLibrary 'org.joml:joml:1.10.4'
 
