@@ -125,6 +125,9 @@ dependencies {
     // 打包joml
     jarJar(group: 'org.joml', name: 'joml', version: '[1.0,2.0)')
 
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge:1.18.2-0.6.8.a")
+    implementation fg.deobf("create:create:1.18.2-0.5.0.h")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

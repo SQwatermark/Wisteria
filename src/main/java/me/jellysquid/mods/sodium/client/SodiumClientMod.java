@@ -3,8 +3,10 @@ package me.jellysquid.mods.sodium.client;
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +24,8 @@ public class SodiumClientMod {
 
     private static String MOD_VERSION;
 
+    public static boolean flywheelLoaded = false;
+
     static {
         MOD_VERSION = "0.0.1";
 
@@ -31,15 +35,7 @@ public class SodiumClientMod {
 
     @SubscribeEvent
     public static void onInitializeClient(FMLClientSetupEvent event) {
-//        ModContainer mod = FabricLoader.getInstance()
-//                .getModContainer("sodium")
-//                .orElseThrow(NullPointerException::new);
-
-//        MOD_VERSION = mod.getMetadata()
-//                .getVersion()
-//                .getFriendlyString();
-
-
+        flywheelLoaded = ModList.get().isLoaded("flywheel");
     }
 
     public static SodiumGameOptions options() {
