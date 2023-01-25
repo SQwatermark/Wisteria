@@ -123,7 +123,7 @@ public class ChunkRenderRebuildTask extends ChunkRenderBuildTask {
 
                     if (!fluidState.isEmpty()) {
                         for (RenderType chunkBufferLayer : RenderType.chunkBufferLayers()) {
-                            if (!ItemBlockRenderTypes.canRenderInLayer(blockState, chunkBufferLayer)) {
+                            if (!ItemBlockRenderTypes.canRenderInLayer(fluidState, chunkBufferLayer)) {
                                 continue;
                             }
 

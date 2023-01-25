@@ -102,6 +102,7 @@ mixin {
 }
 
 repositories {
+    maven { url 'https://github.com/SQwatermark/maven-repository/raw/main' }
     flatDir {
         dir 'libs'
     }
@@ -125,8 +126,10 @@ dependencies {
     // 打包joml
     jarJar(group: 'org.joml', name: 'joml', version: '[1.0,2.0)')
 
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge:1.18.2-0.6.8.a")
-    implementation fg.deobf("create:create:1.18.2-0.5.0.h")
+    implementation fg.deobf("net.coderbot.iris:lycoris-mc1.18.2:1.5.0-pre3")
+
+    compileOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge:1.18.2-0.6.8.a")
+    compileOnly fg.deobf("create:create:1.18.2-0.5.0.h")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
